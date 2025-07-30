@@ -10,7 +10,10 @@ import {
 import { ItemMasterService } from './item_master.service';
 import { CreateItemMasterDto } from './dto/create-item_master.dto';
 import { UpdateItemMasterDto } from './dto/update-item_master.dto';
+import { SkipThrottle } from '@nestjs/throttler';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('api-key') // 'api-key' ตรงกับชื่อที่ตั้งใน main.ts
 @Controller('item-master')
 export class ItemMasterController {
   constructor(private readonly itemMasterService: ItemMasterService) {}
@@ -24,8 +27,15 @@ export class ItemMasterController {
   findAll() {
     return this.itemMasterService.findItemAll();
   }
+  // ตัวอย่าง endpoint ที่ "ไม่ถูก limit"
+  // @Get('no-limit')
+  // @SkipThrottle()
+  // noLimit() {
+  //   return 'No limit here!';
+  // }
 
   @Get('by-item_code/:item_code')
+  @SkipThrottle() // ไม่ถูกจำกัด rate limit
   findByItemCode(@Param('item_code') item_code: string) {
     return this.itemMasterService.findByItemCode(item_code);
   }
