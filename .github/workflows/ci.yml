@@ -21,7 +21,7 @@ jobs:
           "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" | Out-File -Encoding utf8 -Append .env
           "POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }}" | Out-File -Encoding utf8 -Append .env
           "API_KEY=${{ secrets.API_KEY }}" | Out-File -Encoding utf8 -Append .env
-          "PORT=3001" | Out-File -Encoding utf8 -Append .env
+          "PORT=3000" | Out-File -Encoding utf8 -Append .env
         shell: powershell
 
       - name: Set up Docker Buildx
