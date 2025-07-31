@@ -41,5 +41,5 @@ jobs:
           docker stop $cid
           docker rm $cid
           }
-          docker run -d --name nestjs-api -p 3000:3000 ghcr.io/${{ github.repository }}:latest
+          docker run -d --name nestjs-api -p 3001:3000 ghcr.io/${{ github.repository }}:latest
         shell: powershell
