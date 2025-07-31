@@ -7,7 +7,8 @@ on:
 jobs:
   build:
     runs-on: self-hosted # หรือ ubuntu-latest ถ้าไม่ได้ใช้ self-hosted runner
-
+    environment:
+      name: nestJS # <<-- ชื่อต้องตรงกับ Environment ที่สร้างไว้
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
