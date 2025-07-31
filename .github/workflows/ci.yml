@@ -2,11 +2,11 @@ name: Build and Deploy Docker image
 
 on:
   push:
-    branches: [main] # ทุกครั้งที่ push เข้า main
+    branches: [main]
 
 jobs:
   build:
-    runs-on: self-hosted # หรือใช้ ubuntu-latest ถ้าไม่ได้ใช้ self-hosted runner
+    runs-on: self-hosted # หรือ ubuntu-latest ถ้าไม่ได้ใช้ self-hosted runner
 
     steps:
       - name: Checkout code
@@ -20,17 +20,22 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN  }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}:latest .
+        shell: bash
 
       - name: Push Docker image to GitHub Container Registry
-        run: docker push ghcr.io/${{ github.repository }}:latest
+        run: |
+          docker push ghcr.io/${{ github.repository }}:latest
+        shell: bash
 
-      # Optional: รัน docker container หลัง build (สำหรับ self-hosted runner)
+      # รัน Docker container ใหม่ (ลบอันเก่าถ้ามี) -- ไม่มี error ถ้าไม่มี container เดิม
       - name: Run Docker container
         run: |
           docker stop nestjs-api || true
           docker rm nestjs-api || true
           docker run -d --name nestjs-api -p 3000:3000 ghcr.io/${{ github.repository }}:latest
+        shell: bash
