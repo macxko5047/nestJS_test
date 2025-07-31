@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('API NestJS')
+    .setTitle('API NestJS test -0001')
     .setDescription('The API test by mk 007')
     .setVersion('1.0')
     // เพิ่ม security แบบ apiKey
@@ -26,6 +26,9 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
   // แสดงลิงก์หลังจากแอป start
-  console.log('\x1b[36m%s\x1b[0m', `🚀 API Docs: http://localhost:3000/api`);
+  console.log(
+    '\x1b[36m%s\x1b[0m',
+    `🚀 API Docs: http://localhost:${process.env.PORT ?? 3000}/api`,
+  );
 }
 bootstrap();

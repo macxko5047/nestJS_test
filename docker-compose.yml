@@ -1,0 +1,11 @@
+version: '1.0'
+services:
+  api-nestjs:
+    image: nestjs-api # <-- ต้องใช้ตัวพิมพ์เล็กทั้งหมด
+    container_name: nestjs-api # <-- ควรใช้ตัวพิมพ์เล็กเช่นกัน
+    build: .
+    env_file:
+      - .env
+    ports:
+      - '3001:3000'
+    command: bun run start:prod
