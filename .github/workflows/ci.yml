@@ -35,12 +35,11 @@ jobs:
       # รัน Docker container ใหม่ (ลบอันเก่าถ้ามี) -- ไม่มี error ถ้าไม่มี container เดิม
       - name: Run Docker container
         run: |
-          # Stop old container (ignore error)
-          docker stop nestjs-api -ErrorAction SilentlyContinue
-
-          # Remove old container (ignore error)
-          docker rm nestjs-api -ErrorAction SilentlyContinue
-
-          # Run new container
-          docker run -d --name nestjs-api -p 3001:3000 ghcr.io/${{ github.repository }}:latest
+          # Stop old container if exists
+          $cid = docker ps -aq -f name=nestjs-api
+          if ($cid) {
+          docker stop $cid
+          docker rm $cid
+          }
+          docker run -d --name nestjs-api -p 3000:3000 ghcr.io/${{ github.repository }}:latest
         shell: powershell
