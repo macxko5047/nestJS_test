@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('API NestJS')
+    .setTitle('API NestJS test by mk V.1')
     .setDescription('The API test by mk 007')
     .setVersion('1.0')
     // เพิ่ม security แบบ apiKey
