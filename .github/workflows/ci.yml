@@ -25,12 +25,12 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ghcr.io/${{ github.repository }}:latest .
-        shell: bash
+        shell: pwsh
 
       - name: Push Docker image to GitHub Container Registry
         run: |
           docker push ghcr.io/${{ github.repository }}:latest
-        shell: bash
+        shell: pwsh
 
       # รัน Docker container ใหม่ (ลบอันเก่าถ้ามี) -- ไม่มี error ถ้าไม่มี container เดิม
       - name: Run Docker container
@@ -38,4 +38,4 @@ jobs:
           docker stop nestjs-api || true
           docker rm nestjs-api || true
           docker run -d --name nestjs-api -p 3000:3000 ghcr.io/${{ github.repository }}:latest
-        shell: bash
+        shell: pwsh
