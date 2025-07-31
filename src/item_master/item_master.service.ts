@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateItemMasterDto } from './dto/create-item_master.dto';
 import { UpdateItemMasterDto } from './dto/update-item_master.dto';
 import { ItemMaster } from 'src/entities/entities/ItemMaster';
@@ -42,17 +42,30 @@ export class ItemMasterService {
   }
 
   // Update item
-  async update(uid: string | number, updateItemMasterDto: UpdateItemMasterDto) {
-    await this.itemMasterRepo.update(
-      { uid: uid.toString() },
-      updateItemMasterDto,
-    );
-    return this.findOne(uid);
+  async update(uid: string, dto: UpdateItemMasterDto) {
+    const item = await this.itemMasterRepo.findOne({ where: { uid } });
+    if (!item) {
+      throw new NotFoundException(`Item with uid ${uid} not found`);
+    }
+
+    // update property ตามที่รับเข้ามา
+    Object.assign(item, dto);
+
+    // save กลับเข้าไปใน db
+    const updatedItem = await this.itemMasterRepo.save(item);
+
+    return updatedItem;
   }
 
   // Remove item
   async remove(uid: string | number) {
-    await this.itemMasterRepo.delete({ uid: uid.toString() });
+    const result = await this.itemMasterRepo.delete({ uid: uid.toString() });
+
+    if (result.affected === 0) {
+      // ไม่เจอ uid นี้ใน database
+      throw new NotFoundException(`Item with uid ${uid} not found`);
+    }
+
     return { deleted: true };
   }
 }
